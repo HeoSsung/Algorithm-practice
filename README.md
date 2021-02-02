@@ -2,7 +2,6 @@
 1일 1알고리즘:sunny:
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/HeoSsung/Algorithm-practice)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/HeoSsung/Algorithm-practice)
 ![GitHub top language](https://img.shields.io/github/languages/top/HeoSsung/Algorithm-practice?color=yellow&logo=Java)
 
 ### Array
