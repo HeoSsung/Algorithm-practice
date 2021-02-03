@@ -1,45 +1,51 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
-
+ 
 public class Solution {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		for (int t = 0; t < 10; t++) {
-			int dump = Integer.parseInt(br.readLine());
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int[] box = new int[100];
-			for (int i=0; st.hasMoreTokens();i++)
-				box[i]=Integer.parseInt(st.nextToken());
-			int min = 100, max= 0;
-			for (int i = 0; i < dump; i++) {
-				int maxIndex = 0,minIndex = 0;
-				for(int j=0;j<100;j++) {
-					if(box[j]==0) break;
-					if(max<box[j]) {
-						max=box[j];
-						maxIndex= j;
-					}
-					if(min>box[j]) {
-						min= box[j];
-						minIndex=j;
-					}
-				}
-				if (max - min <= 1)
-					break;
-				System.out.println(box[maxIndex]);
-				box[maxIndex]--;
-				System.out.println(box[maxIndex]);
-				box[minIndex]++;
-			}
-			
-			sb.append("#").append(t + 1).append(" ").append(max - min).append("\n");
-			System.out.println(sb.toString());
-			
-
-		}
-	}
+ 
+    static int[] floor;
+    static int minIdx, maxIdx;
+ 
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                 
+         
+        for (int t = 1; t <= 10; t++) {
+ 
+            int dump = Integer.parseInt(br.readLine());
+             
+            floor = new int[100];
+            StringTokenizer st = new StringTokenizer(br.readLine());
+             
+            for (int i = 0; i < 100; i++) {
+                floor[i] = Integer.parseInt(st.nextToken());
+            }
+ 
+            // 최대 최소 위치
+            resetMinMax();
+            for (int i = 0; i < dump; i++) {
+                if (floor[maxIdx] - floor[minIdx] <= 1)
+                    break;
+                floor[maxIdx]--;
+                floor[minIdx]++;
+                resetMinMax();
+            }
+            int result = floor[maxIdx]-floor[minIdx];
+ 
+            System.out.println("#" + t + " " + result);
+        }
+    }
+ 
+    static void resetMinMax() {
+        for (int i = 0; i < 100; i++) {
+            // min
+            if (floor[i] < floor[minIdx]) {
+                minIdx = i;
+            }
+            if (floor[i] > floor[maxIdx]) {
+                maxIdx = i;
+            }
+        }
+    }
 }
