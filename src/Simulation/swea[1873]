@@ -1,107 +1,125 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
- 
+
 public class Solution {
- 
-    static int T; // 테스트 케이스 수
-    static int H, W; // map의 높이와 너비
-    static int N; // 사용자의 입력의 수
-    static char[][] map; // 배틀필드 맵
-    static char[] input; // 사용자 입력을 저장
-    static char[] dirArray = { '<', '^', '>', 'v' }; // 방향키 배열
-    static char[] dirInput = { 'L', 'U', 'R', 'D' };
-    static int dir; // 방향키 0123 - 좌상우하
-    static int[] dx = { -1, 0, 1, 0 }; // 좌상우하
-    static int[] dy = { 0, -1, 0, 1 }; // 좌상우하
-    static int sx, sy; // 시작 좌표
-    static int nx, ny; // 변화하는 탱크의 좌표
- 
-    public static void main(String[] args) throws Exception {
- 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
- 
-        // 테스트케이스 수 입력
-        T = Integer.parseInt(br.readLine());
- 
-        for (int t = 1; t <= T; t++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            // 높이와 너비 입력
-            H = Integer.parseInt(st.nextToken());
-            W = Integer.parseInt(st.nextToken());
-            map = new char[H][W];
-            // map 구조 입력
-            for (int i = 0; i < H; i++) {
-                map[i] = br.readLine().toCharArray();
- 
-                // 시작 좌표 검색
-                for (int j = 0; j < W; j++) {
-                    for (int k = 0; k < 4; k++) {
-                        if (map[i][j] == dirArray[k]) {
-                            sy = i;
-                            sx = j;
-                            dir = k;
-                        }
-                    }
-                }
-            }
- 
-            // 사용자의 입력의 수 입력.
-            N = Integer.parseInt(br.readLine());
- 
-            // 한줄 그대로 읽어와서 char배열로 변환.
-            input = br.readLine().toCharArray();
- 
-            // 'S' 이전의 값을 읽어서 dir저장.
-            for (int i = 0; i < N; i++) {
- 
-                if (input[i] == '-')
-                    continue;
-                if (input[i] == 'S') {
-                    // 총알의 좌표
-                    int sny = sy + dy[dir];
-                    int snx = sx + dx[dir];
-                    while (true) {
-                        if (sny < 0 || sny >= H || snx < 0 || snx >= W)
-                            break; // map 범위 체크
- 
-                        if (map[sny][snx] == '#')
-                            break; // 강철벽 체크
-                        if (map[sny][snx] == '*') {
-                            map[sny][snx] = '.'; // 벽돌벽 체크
-                            break;
-                        }
-                        sny += dy[dir];
-                        snx += dx[dir];
-                    }
-                } else {
-                    for (int j = 0; j < 4; j++) {
-                        if (input[i] == dirInput[j])
-                            dir = j;
-                    }
-                    map[sy][sx] = dirArray[dir];
-                    ny = sy + dy[dir];
-                    nx = sx + dx[dir];
-                    if (ny < 0 || ny >= H || nx < 0 || nx >= W)
-                        continue;
-                    if (map[ny][nx] == '.') {
-                        map[sy][sx] = '.';
-                        map[ny][nx] = dirArray[dir];
- 
-                        sy = ny;
-                        sx = nx;
-                    }
-                }
-            }
- 
-            System.out.print("#" + t + " ");
-            for (int i = 0; i < H; i++) {
-                for (int j = 0; j < W; j++) {
-                    System.out.print(map[i][j]);
-                }
-                System.out.println();
-            }
-        }
-    }
+
+	static int T, H, W, N;
+	static char[][] map;
+
+	// 좌 우 상 하 방향 ㅎㅎㅎ
+	static int[] dx = { -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, -1, 1 };
+	static int posX, posY;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		T = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= T; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			H = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
+			map = new char[H][W];
+
+			for (int i = 0; i < H; i++) {
+				map[i] = br.readLine().toCharArray();
+				for (int j = 0; j < W; j++) {
+					switch (map[i][j]) {
+					case '<':
+					case '>':
+					case '^':
+					case 'v':
+						posY = i;
+						posX = j;
+						break;
+					}
+				}
+			}
+
+			N = Integer.parseInt(br.readLine());
+			String input = br.readLine();
+
+			for (int i = 0; i < N; i++) {
+				char c = input.charAt(i);
+				switch (c) {
+				case 'S':
+					shoot();
+					break;
+				case 'L':
+					map[posY][posX] = '<';
+					move(0);
+					break;
+				case 'R':
+					map[posY][posX] = '>';
+					move(1);
+					break;
+				case 'U':
+					map[posY][posX] = '^';
+					move(2);
+					break;
+				case 'D':
+					map[posY][posX] = 'v';
+					move(3);
+					break;
+				}
+			}
+			System.out.print("#" + t + " ");
+			for (int i = 0; i < H; i++) {
+				for (int j = 0; j < W; j++) {
+					System.out.print(map[i][j]);
+				}
+				System.out.println();
+			}
+		}
+	}
+
+	static void shoot() {
+		int dir = 0;
+		switch (map[posY][posX]) {
+		case '<':
+			dir = 0;
+			break;
+		case '>':
+			dir = 1;
+			break;
+		case '^':
+			dir = 2;
+			break;
+		case 'v':
+			dir = 3;
+			break;
+		}
+		int ny = posY;
+		int nx = posX;
+		while (true) {
+			
+			ny += dy[dir];
+			nx += dx[dir];
+		
+			if (ny < 0 || ny >= H || nx < 0 || nx >= W)
+				return;
+			if (map[ny][nx] == '#')
+				return;
+
+			if (map[ny][nx] == '*') {
+				map[ny][nx] = '.';
+				return;
+			}
+
+		}
+	}
+
+	static void move(int dir) {
+
+		int ny = posY + dy[dir];
+		int nx = posX + dx[dir];
+		if (ny < 0 || ny >= H || nx < 0 || nx >= W) return;
+		if (map[ny][nx] == '.') {
+			map[ny][nx] = map[posY][posX];
+			map[posY][posX] = '.';
+			posY = ny;
+			posX = nx;
+		}
+
+	}
 }
