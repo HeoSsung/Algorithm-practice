@@ -1,37 +1,35 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
- 
- 
+
+// Scanner --> BufferedReader
+// int[] --> char[]
+// local --> static
+// 배열2개 -> 1개
+
 public class Solution {
- 
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
-        int res;
-        StringBuilder sb = new StringBuilder();
-         
-        for (int t = 0; t < T; t++) {
-            res = 0;
-            String str = br.readLine();
-            int len = str.length();
-            char[] input = str.toCharArray();
-             
- 
-            for (int i = 0; i < len; i++) {
-                if (input[i] =='1') {
-                    for (int j = i; j < len; j++) {
-                        if (input[j] == '0')
-                            input[j] = '1';
-                        else
-                            input[j] = '0';
-                    }
-                    res++;
-                }
-            }
-            sb.append("#").append((t+1)).append(" ").append(res).append("\n");
-        }
-        System.out.println(sb);
-    }
- 
+
+	static int T;
+	static char[] input;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		T = Integer.parseInt(br.readLine());
+
+		for (int t = 1; t <= T; t++) {
+			int count = 0;
+			input = br.readLine().toCharArray();
+
+			int cnt = input.length;
+			// 배열의 값이 이전값과 현재값이 다르면 cnt증가.
+			char current = '0';
+			for (int i = 0; i < cnt; i++) {
+				if (input[i] != current) {
+					count++;
+				}
+				current = input[i];
+			}
+			System.out.println("#" + t + " " + count);
+		}
+	}
 }
