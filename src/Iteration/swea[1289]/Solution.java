@@ -1,14 +1,10 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
  
-// Scanner --> BufferedReader
-// int[] --> char[]
-// local --> static
- 
 public class Solution {
  
     static int T;
-    static char[] input, memory;
+    static char[] input;
  
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,20 +14,15 @@ public class Solution {
         for (int t = 1; t <= T; t++) {
             int count = 0;
             input = br.readLine().toCharArray();
-            memory = new char[input.length];
  
-            int cnt = memory.length;
-            for (int i = 0; i < cnt; i++)
-                memory[i] = '0';
-         
+            int cnt = input.length;
+            // 배열의 값이 이전값과 현재값이 다르면 cnt증가.
+            char current = '0';
             for (int i = 0; i < cnt; i++) {
-                if (memory[i] != input[i]) {
-                    for (int j = i; j < cnt; j++) {
-                        memory[j] = input[i];
-                    }
- 
+                if (input[i] != current) {
                     count++;
                 }
+                current = input[i];
             }
             System.out.println("#" + t + " " + count);
         }
