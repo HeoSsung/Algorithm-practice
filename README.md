@@ -58,6 +58,8 @@
 | 01  |     | [BOJ[2563]  색종이](./src/Implementation/BOJ[2563])                                   |      |
 | 02  |     | [BOJ[1652]  누울 자리를 찾아라](./src/Implementation/BOJ[1652])                                   |      |
 | 03  |     | [BOJ[2961]  도영이가 만든 맛있는 음식](./src/Implementation/BOJ[2961])                                   |      |
+| 04  |     | [BOJ[15686]  치킨 배달](./src/Implementation/BOJ[15686])                                   |      |
+
 
 
 ### Greedy
